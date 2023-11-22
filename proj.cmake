@@ -22,6 +22,14 @@ if("$ENV{BL_SDK_BASE}" STREQUAL "")
             COMMAND git clone --recursive ${GIT_AI_M6X_SDK} $ENV{BL_SDK_BASE}
             COMMAND_ECHO STDOUT
         )
+        if(MINGW OR CYGWIN OR WIN32)
+        else()
+            execute_process(
+                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+                COMMAND chmod 777 -R $ENV{BL_SDK_BASE}/tools
+                COMMAND_ECHO STDOUT
+            )
+        endif()
     endif()
 else()
     message(STATUS "Find AI-M6X-SDK: '$ENV{BL_SDK_BASE}'")
