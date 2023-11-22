@@ -49,9 +49,9 @@ if(MINGW OR CYGWIN OR WIN32)
 
     # 生成烧录脚本
     file(WRITE "${CMAKE_CURRENT_SOURCE_DIR}/flash.bat"
-                "SET PATH=$ENV{BL_SDK_BASE}/tools/ninja;%PATH%\nninja -j 2 -C build flash\npause")
+                "SET PATH=$ENV{BL_SDK_BASE}/tools/ninja;%PATH%\nninja -j 2 -C '${CMAKE_CURRENT_BINARY_DIR}' flash\npause")
     file(WRITE "${CMAKE_CURRENT_SOURCE_DIR}/flash_no_pause.bat"
-                "SET PATH=$ENV{BL_SDK_BASE}/tools/ninja;%PATH%\nninja -j 2 -C build flash")
+                "SET PATH=$ENV{BL_SDK_BASE}/tools/ninja;%PATH%\nninja -j 2 -C '${CMAKE_CURRENT_BINARY_DIR}' flash")
 else()
     set(ENV{BL_SDK_TOOLCHAIN} "$ENV{BL_SDK_BASE}/toolchain")
     set(GIT_TOOLCHAIN ${GIT_TOOLCHAIN_UNIX})
