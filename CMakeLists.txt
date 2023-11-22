@@ -37,9 +37,12 @@ project(${PROJECT_NAME})
 # 复制固件为 firmware.bin
 add_custom_target(flash
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
-                ${CMAKE_CURRENT_SOURCE_DIR}/build/build_out/${proj_name}.bin
-                ${CMAKE_CURRENT_SOURCE_DIR}/build/build_out/firmware.bin
-    COMMENT "[FLASH] Preparing firmware."
+        ${build_dir}/${proj_name}.bin
+        ${build_dir}/firmware.bin
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        ${CMAKE_CURRENT_SOURCE_DIR}/flash_prog_cfg.ini
+        ${build_dir}/flash_prog_cfg.ini
+    COMMENT "[FLASH] Finished prepare, starting flash to port ${CONFIG_COMX}"
     USES_TERMINAL
 )
 # 关联依赖，使得 flash 指令能够获得最新的编译产物
@@ -53,15 +56,14 @@ list(APPEND BL_FLASH_PROC_CONFIG --interface=uart)
 list(APPEND BL_FLASH_PROC_CONFIG --baudrate=${BAUDRATE})
 list(APPEND BL_FLASH_PROC_CONFIG --port=${CONFIG_COMX})
 list(APPEND BL_FLASH_PROC_CONFIG --cpu_id=${CPU_ID})
-list(APPEND BL_FLASH_PROC_CONFIG --config=${CMAKE_CURRENT_SOURCE_DIR}/flash_prog_cfg.ini)
+list(APPEND BL_FLASH_PROC_CONFIG --config=${build_dir}/flash_prog_cfg.ini)
 # 附加到flash target之后
 add_custom_command(
     TARGET flash
     POST_BUILD
-    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+    WORKING_DIRECTORY ${build_dir}
     COMMAND ${BL_FLASH_PROC} ${BL_FLASH_PROC_CONFIG}
     USES_TERMINAL
-    COMMENT "[FLASH] Finished prepare, starting flash to port ${CONFIG_COMX}"
 )
 # ############################  End  #########################
 # #############################################################
