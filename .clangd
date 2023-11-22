@@ -1,0 +1,6 @@
+CompileFlags:
+  Remove:
+    - '-march=*'
+    - '-fstrict-volatile-bitfields'
+    - '-mtune=*'
+    - '-mabi=*'
